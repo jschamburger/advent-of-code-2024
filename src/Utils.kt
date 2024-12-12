@@ -23,4 +23,23 @@ fun Any?.println() = println(this)
 data class Coordinate(val y: Int, val x: Int) {
     operator fun plus(other: Coordinate): Coordinate = Coordinate(y + other.y, x + other.x)
     operator fun minus(other: Coordinate): Coordinate = Coordinate(y - other.y, x - other.x)
+    fun top() = Coordinate(y - 1, x)
+    fun right() = Coordinate(y, x + 1)
+    fun bottom() = Coordinate(y + 1, x)
+    fun left() = Coordinate(y, x - 1)
+    fun next() = setOf(top(), right(), bottom(), left())
 }
+
+typealias Matrix<T> = List<List<T>>
+
+fun <T> Matrix<T>.safeGet(coordinate: Coordinate): T? {
+    return if (coordinate.x < 0 || coordinate.y < 0 || coordinate.x >= this[0].size || coordinate.y >= this.size) {
+        null
+    } else {
+        this[coordinate.y][coordinate.x]
+    }
+}
+
+fun <T> Matrix<T>.get(coordinate: Coordinate) = this[coordinate.y][coordinate.x]
+
+fun <T> MutableCollection<T>.removeFirst() = first().also{ remove(it) }
