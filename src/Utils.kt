@@ -27,8 +27,17 @@ data class Coordinate(val y: Int, val x: Int) {
     fun right() = Coordinate(y, x + 1)
     fun bottom() = Coordinate(y + 1, x)
     fun left() = Coordinate(y, x - 1)
-    fun next() = setOf(top(), right(), bottom(), left())
+    fun neighbours() = setOf(top(), right(), bottom(), left())
+    fun neighbour(direction: Direction) =
+        when (direction) {
+            Direction.TOP -> top()
+            Direction.RIGHT -> right()
+            Direction.BOTTOM -> bottom()
+            Direction.LEFT -> left()
+        }
 }
+
+enum class Direction { TOP, RIGHT, BOTTOM, LEFT }
 
 typealias Matrix<T> = List<List<T>>
 
@@ -41,5 +50,22 @@ fun <T> Matrix<T>.safeGet(coordinate: Coordinate): T? {
 }
 
 fun <T> Matrix<T>.get(coordinate: Coordinate) = this[coordinate.y][coordinate.x]
+
+fun <T> Matrix<T>.println() {
+    this.forEach {
+        println(it)
+    }
+}
+
+fun <T> Matrix<T>.sizeY() = size
+fun <T> Matrix<T>.sizeX() = this[0].size
+
+fun <T> Matrix<T>.coordinates(): List<Coordinate> {
+    return (0 until sizeY()).map { y ->
+        (0 until sizeX()).map { x ->
+            Coordinate(y, x)
+        }.toList()
+    }.toList().flatten()
+}
 
 fun <T> MutableCollection<T>.removeFirst() = first().also{ remove(it) }

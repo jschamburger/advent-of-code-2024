@@ -23,7 +23,7 @@ fun main() {
                 completeTrails.add(trail)
             } else {
                 val headOfTrail = trail.last()
-                for (next in headOfTrail.next()) {
+                for (next in headOfTrail.neighbours()) {
                     if (matrix.safeGet(next) == matrix.get(headOfTrail) + 1) {
                         currentTrails.add(trail + next)
                     }
