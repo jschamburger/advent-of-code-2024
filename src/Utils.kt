@@ -37,7 +37,35 @@ data class Coordinate(val y: Int, val x: Int) {
         }
 }
 
-enum class Direction { TOP, RIGHT, BOTTOM, LEFT }
+enum class Direction {
+    TOP, RIGHT, BOTTOM, LEFT;
+
+    fun rotateClockwise(): Direction =
+        when (this) {
+            TOP -> RIGHT
+            RIGHT -> BOTTOM
+            BOTTOM -> LEFT
+            LEFT -> TOP
+        }
+
+    fun rotateCounterclockwise(): Direction =
+        when (this) {
+            TOP -> LEFT
+            RIGHT -> TOP
+            BOTTOM -> RIGHT
+            LEFT -> BOTTOM
+        }
+
+    companion object {
+        fun fromTo(from: Coordinate, position: Coordinate): Direction =
+            when (position) {
+                from.top() -> TOP
+                from.right() -> RIGHT
+                from.bottom() -> BOTTOM
+                else -> LEFT
+            }
+    }
+}
 
 typealias Matrix<T> = List<List<T>>
 
@@ -49,7 +77,7 @@ fun <T> Matrix<T>.safeGet(coordinate: Coordinate): T? {
     }
 }
 
-fun <T> Matrix<T>.get(coordinate: Coordinate) = this[coordinate.y][coordinate.x]
+operator fun <T> Matrix<T>.get(coordinate: Coordinate) = this[coordinate.y][coordinate.x]
 
 fun <T> Matrix<T>.println() {
     this.forEach {
@@ -68,4 +96,4 @@ fun <T> Matrix<T>.coordinates(): List<Coordinate> {
     }.toList().flatten()
 }
 
-fun <T> MutableCollection<T>.removeFirst() = first().also{ remove(it) }
+fun <T> MutableCollection<T>.removeFirst() = first().also { remove(it) }
