@@ -64,6 +64,14 @@ enum class Direction {
                 from.bottom() -> BOTTOM
                 else -> LEFT
             }
+
+        fun fromChar(char: Char): Direction =
+            when (char) {
+                '^' -> TOP
+                '>' -> RIGHT
+                'v' -> BOTTOM
+                else -> LEFT
+            }
     }
 }
 
@@ -78,10 +86,17 @@ fun <T> Matrix<T>.safeGet(coordinate: Coordinate): T? {
 }
 
 operator fun <T> Matrix<T>.get(coordinate: Coordinate) = this[coordinate.y][coordinate.x]
+fun <T> Matrix<T>.set(coordinate: Coordinate, value: T): Matrix<T> {
+    val newMatrix = this.toMutableList()
+    val mutableList = this[coordinate.y].toMutableList()
+    mutableList[coordinate.x] = value
+    newMatrix[coordinate.y] = mutableList
+    return newMatrix
+}
 
 fun <T> Matrix<T>.println() {
     this.forEach {
-        println(it)
+        println(it.joinToString(""))
     }
 }
 
